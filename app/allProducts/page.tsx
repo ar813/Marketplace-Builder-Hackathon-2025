@@ -89,14 +89,14 @@ const Page = () => {
     };
 
     const addToWishList = (product: Product) => {
-            const wishList: Product[] = JSON.parse(localStorage.getItem("wishList") || "[]");
-            const isProductInWishList = wishList.some((item) => item.productName === product.productName);
-            if (isProductInWishList) {
-                alert("This product is already in your wishlist!");
-                return;
-            }
-            wishList.push(product);
-            localStorage.setItem("wishList", JSON.stringify(wishList));
+        const wishList: Product[] = JSON.parse(localStorage.getItem("wishList") || "[]");
+        const isProductInWishList = wishList.some((item) => item.productName === product.productName);
+        if (isProductInWishList) {
+            alert("This product is already in your wishlist!");
+            return;
+        }
+        wishList.push(product);
+        localStorage.setItem("wishList", JSON.stringify(wishList));
         alert("Item is successfully added to your favorites!")
     };
 
@@ -137,44 +137,51 @@ const Page = () => {
                     />
                 </div>
 
-                {/* Products List */}
-                {loading ? (
+                {!data ? (
                     <div className="w-full flex flex-col items-center justify-center px-[20px] sm:px-[0px] h-[400px]">
-                        <div className="w-[70px] h-[70px] border-t-[10px] border-t-[gray] border-[10px] border-[lightgray] mt-[15px] animate-spin rounded-[50%]"></div>
-                        <h1 className="text-[20px] mt-[15px]">Loading...</h1>
+                        <h1 className="text-[20px]">Something went wrong</h1>
                     </div>
                 ) : (
                     <div>
-                        {filteredData && filteredData.length === 0 ? (
-                            <div className="flex items-center justify-center text-[20px] font-[500] h-[200px]">
-                                No product found
+                        {loading ? (
+                            <div className="w-full flex flex-col items-center justify-center px-[20px] sm:px-[0px] h-[400px]">
+                                <div className="w-[70px] h-[70px] border-t-[10px] border-t-[gray] border-[10px] border-[lightgray] mt-[15px] animate-spin rounded-[50%]"></div>
+                                <h1 className="text-[20px] mt-[15px]">Loading...</h1>
                             </div>
                         ) : (
-                            <div className="grid sm:grid-cols-2 gap-[20px] md:grid-cols-3 pb-[80px]">
-                                {filteredData?.map((item, index) => (
-                                    <div key={index}>
-                                        <div className="grid gap-[8px] text-[15px] font-[500] relative">
+                            <div>
+                                {filteredData && filteredData.length === 0 ? (
+                                    <div className="flex items-center justify-center text-[20px] font-[500] h-[200px]">
+                                        No product found
+                                    </div>
+                                ) : (
+                                    <div className="grid sm:grid-cols-2 gap-[20px] md:grid-cols-3 pb-[80px]">
+                                        {filteredData?.map((item, index) => (
+                                            <div key={index}>
+                                                <div className="grid gap-[8px] text-[15px] font-[500] relative">
 
-                                            <div className="grid gap-[15px] text-[29px] absolute right-[14px] top-[20px]">
-                                                <div onClick={() => addToWishList(item)} className="rounded-[30px] bg-[white] w-[35px] h-[35px] flex justify-center items-center hover:bg-red-500 hover:text-white hover:shadow-lg transition duration-200 ease-in-out">
-                                                    <IoMdHeartEmpty className="text-[20px]" />
-                                                </div>
-                                                <div onClick={() => { addToCart(item) }} className="rounded-[30px] bg-[white] w-[35px] h-[35px] flex justify-center items-center hover:bg-blue-500 hover:text-white hover:shadow-lg transition duration-200 ease-in-out">
-                                                    <IoBagOutline className="text-[19px]" />
+                                                    <div className="grid gap-[15px] text-[29px] absolute right-[14px] top-[20px]">
+                                                        <div onClick={() => addToWishList(item)} className="rounded-[30px] bg-[white] w-[35px] h-[35px] flex justify-center items-center hover:bg-red-500 hover:text-white hover:shadow-lg transition duration-200 ease-in-out">
+                                                            <IoMdHeartEmpty className="text-[20px]" />
+                                                        </div>
+                                                        <div onClick={() => { addToCart(item) }} className="rounded-[30px] bg-[white] w-[35px] h-[35px] flex justify-center items-center hover:bg-blue-500 hover:text-white hover:shadow-lg transition duration-200 ease-in-out">
+                                                            <IoBagOutline className="text-[19px]" />
+                                                        </div>
+                                                    </div>
+
+                                                    <Link href={item.productName} key={index}>
+                                                        <img src={item.image} alt={item.productName} className="w-full" />
+                                                        <h1 className="text-[#9E3500] mt-[15px]">{item.status}</h1>
+                                                        <h1 className="text-[black]">{item.productName}</h1>
+                                                        <h1 className="text-[gray] font-[400]">{item.category}</h1>
+                                                        <h1 className="text-[gray] font-[400]">{item.colors.join(", ")}</h1>
+                                                        <h1 className="text-[black] mt-[10px]">MRP : ₹ {(item.price).toFixed(2)}</h1>
+                                                    </Link>
                                                 </div>
                                             </div>
-
-                                            <Link href={item.productName} key={index}>
-                                                <img src={item.image} alt={item.productName} className="w-full" />
-                                                <h1 className="text-[#9E3500] mt-[15px]">{item.status}</h1>
-                                                <h1 className="text-[black]">{item.productName}</h1>
-                                                <h1 className="text-[gray] font-[400]">{item.category}</h1>
-                                                <h1 className="text-[gray] font-[400]">{item.colors.join(", ")}</h1>
-                                                <h1 className="text-[black] mt-[10px]">MRP : ₹ {(item.price).toFixed(2)}</h1>
-                                            </Link>
-                                        </div>
+                                        ))}
                                     </div>
-                                ))}
+                                )}
                             </div>
                         )}
                     </div>
