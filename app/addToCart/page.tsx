@@ -68,7 +68,7 @@ const Page = () => {
         const isProductInCart = cart.some((item) => item.productName === product.productName);
 
         if (isProductInCart) {
-            alert("This product is already in your cart!");
+            alert("This product is already exist in your cart!");
             return; // Prevent adding the product again
         }
 
